@@ -1,10 +1,12 @@
 'use strict';
 
-const fs = require('fs');
+// const fs = require('fs');
+const bodyParser = require('body-parser');
+const express = require('express');
+const morgan = require('morgan');
+
 const tourRouter = require('./routes/tourRoute');
 const userRouter = require('./routes/userRoute');
-const express = require('express');
-const bodyParser = require('body-parser');
 
 /////////////top-level code///////////////
 // console.log('restart happened!');
@@ -17,8 +19,11 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
 ///////////////Middleware/////////////////
-// app.use(express.json()); //middleware
+// app.use(express.json()); //middleware (to get req body object)
 app.use(bodyParser.json({ strict: true })); //middleware
 app.use(express.static(`${__dirname}/public`)); //provide a way to load static file (e.g. html,img etc)
 
