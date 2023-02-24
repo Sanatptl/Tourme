@@ -1,8 +1,11 @@
 const Tour = require('./../models/tourModel');
 // import APIfeatures from './../utils/apiFeatures';
 const APIfeatures = require('./../utils/apiFeatures');
+const catchAsyncFn = require('./../utils/catchAsync');
+const AppError = require('./../utils/appError');
 
 //
+
 exports.bestTours = (req, res, next) => {
   req.query.limit = '5';
   req.query.sort = '-ratingsAverage,price';
@@ -10,76 +13,55 @@ exports.bestTours = (req, res, next) => {
   next();
 };
 
-exports.createTour = async (req, res) => {
-  try {
-    // console.log(req.body);
+//
 
-    // const newTour = new Tour({});
-    // newTour.save().then();
-
-    const newTour = await Tour.create(req.body);
-    res.status(201).json({
-      status: 'success',
-      data: {
-        tour: newTour,
-      },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: 'Fail',
-      Error: err,
-    });
-  }
+exports.createTour = async (req, res, next) => {
+  const newTour = await Tour.create(req.body);
+  res.status(201).json({
+    status: 'success',
+    data: {
+      tour: newTour,
+    },
+  });
 };
 
-exports.getTours = async (req, res) => {
-  try {
-    const api = new APIfeatures(Tour.find(), req.query);
-    api.filter().sort().page().fields();
+//
 
-    const tours = await api.query; // put 'await' here bcz we are not able to use sort, limit like methods directaly on promise if it is fullfilled
-    if (!tours.length) {
-      res.status(404).json({
-        status: 'Fail',
-        message: 'No data found!',
-      });
-    } else {
-      res.status(200).json({
-        status: 'success',
-        results: tours.length,
-        data: {
-          tours,
-        },
-      });
-    }
-  } catch (err) {
-    res.status(400).json({
-      // status: err,
-      status: 'something went wrong',
-      Error: err,
-    });
+exports.getTours = catchAsyncFn(async (req, res, next) => {
+  const api = new APIfeatures(Tour.find(), req.query);
+  api.filter().sort().page().fields();
+
+  const tours = await api.query; // put 'await' here bcz we are not able to use sort, limit like methods directaly on promise if it is fullfilled
+
+  res.status(200).json({
+    status: 'success',
+    results: tours.length,
+    data: {
+      tours,
+    },
+  });
+});
+
+//
+
+exports.getTour = catchAsyncFn(async (req, res, next) => {
+  const tour = await Tour.findById(req.params.ID);
+  if (!tour) {
+    return next(new AppError('No tour found with that ID', 404));
   }
-};
+  res.status(200).json({
+    status: 'success',
+    data: {
+      tour,
+    },
+  });
 
-exports.getTour = async (req, res) => {
-  try {
-    const tour = await Tour.findById(req.params.ID);
-
-    res.status(200).json({
-      status: 'success',
-      data: {
-        tour,
-      },
-    });
-  } catch (e) {
-    res.status(501).json({
-      status: 'Bad request',
-    });
-  }
   // console.log(req.params);
-};
+});
 
-exports.updateTour = async (req, res) => {
+//
+
+exports.updateTour = catchAsyncFn(async (req, res, next) => {
   const updatedTour = await Tour.findByIdAndUpdate(
     req.params.ID,
     req.body,
@@ -96,17 +78,83 @@ exports.updateTour = async (req, res) => {
     status: 'success',
     data: updatedTour,
   });
-};
+});
 
-exports.deleteTour = async (req, res) => {
-  try {
-    const deletedTour = await Tour.findByIdAndDelete(req.params.ID);
-    res.status(204).json({
-      status: 'success',
-    });
-  } catch (e) {
-    res.status(404).json({
-      status: 'Fail',
-    });
+//
+
+exports.deleteTour = catchAsyncFn(async (req, res) => {
+  const deletedTour = await Tour.findByIdAndDelete(req.params.ID);
+  if (!deletedTour) {
+    return next(new AppError('No tour found with that ID', 404));
   }
-};
+  res.status(204).json({
+    status: 'success',
+  });
+});
+
+//
+
+exports.getTourStats = catchAsyncFn(async (req, res, next) => {
+  const stats = await Tour.aggregate([
+    // { $match: { price: { $gte: 500 } } },
+    // { $count: 'numTour' },
+    {
+      $group: {
+        // _id: '$difficulty',
+        _id: { $toUpper: '$difficulty' },
+        // _id: '$ratingsAverage',
+        // _id: null,
+        numTour: { $count: {} }, //'count' is equavelant with 'sum: 1'
+        avgRating: { $avg: '$rating' },
+        avgPrice: { $avg: '$price' },
+        minPrice: { $min: '$price' },
+      },
+    },
+    { $sort: { numTour: -1 } },
+    // { $match: { _id: { $ne: 'EASY' } } }, // ne:-notEqualto
+  ]);
+
+  res.status(200).json({
+    data: {
+      results: stats.length,
+      collection: stats,
+    },
+  });
+});
+
+//
+
+exports.getMonthlyPlan = catchAsyncFn(async (req, res, next) => {
+  const year = req.params.year * 1;
+  const plan = await Tour.aggregate([
+    { $unwind: '$startDates' },
+    {
+      $match: {
+        startDates: {
+          $gte: new Date(`${year}-01-01`),
+          $lte: new Date(`${year + 1}-01-01`),
+        },
+      },
+    },
+    {
+      $group: {
+        _id: { $month: '$startDates' },
+        numOfTours: { $count: {} },
+        Tour: { $push: '$name' },
+      },
+    },
+    { $sort: { _id: 1 } },
+    { $addFields: { month: '$_id' } },
+    {
+      $project: {
+        _id: 0,
+      },
+    },
+  ]);
+
+  res.status(200).json({
+    status: 'success',
+    results: plan.length,
+    data: plan,
+  });
+});

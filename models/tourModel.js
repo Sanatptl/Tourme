@@ -6,6 +6,9 @@ const tourSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+    trim: true,
+    maxlength: [40, 'A tour name must have less or equal then 40 characters'],
+    minlength: [10, 'A tour name must have more or equal then 10 characters'],
   },
   duration: {
     type: Number,
@@ -18,16 +21,31 @@ const tourSchema = new mongoose.Schema({
   difficulty: {
     type: String,
     required: true,
+    enum: {
+      values: ['easy', 'medium', 'difficult'],
+      message: 'Difficulty is either: easy, medium, difficult',
+    },
   },
   ratingsAverage: {
     type: Number,
     default: 4.5,
+    min: [1, 'Rating must be above 1.0'],
+    max: [5, 'Rating must be below 5.0'],
   },
   ratingsQuantity: {
     type: Number,
     default: 0,
   },
-  priceDiscount: Number,
+  priceDiscount: {
+    type: Number,
+    validate: {
+      validator: function (val) {
+        // 'this' only points to current doc on NEW document creation
+        return val < this.price;
+      },
+      message: 'Discount price ({VALUE}) should be below regular price',
+    },
+  },
   summary: {
     type: String,
     trim: true,
@@ -57,9 +75,55 @@ const tourSchema = new mongoose.Schema({
     type: Number,
     required: [true, 'A tour must have a price'],
   },
+  secretTour: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+tourSchema.virtual('durationWeeks').get(function () {
+  return this.duration / 7;
+});
+
+//
+
+//document middleware : runs before .save() and .create()
+// tourSchema.pre('save', function (next) {
+//   console.log(this);
+//   this.name = 'zarkdsg';
+//   next();
+// });
+
+// tourSchema.post('save', function (doc, next) {
+//   console.log(doc);
+//   next();
+// });
+
+//query middleware
+tourSchema.pre(/^find/, function (next) {
+  // used regEx to find all the string that start with 'find'
+  this.find({ secretTour: { $ne: true } });
+  next();
+});
+
+// tourSchema.pre('find', function (next) {
+//   this.find({ secretTour: { $ne: true } });
+//   next();
+// });
+
+//Aggregation middleware
+tourSchema.pre('aggregate', function (next) {
+  // console.log(this);
+  console.log(
+    this.pipeline().unshift({ $match: { secretTour: { $ne: true } } })
+  );
+  next();
 });
 
 //mongoose model
 const Tour = mongoose.model('Tour', tourSchema);
 
 module.exports = Tour;
+
+// validation and sanitization : basically means that the data come from a user is validate or not, in simpler way,it is checking the entered values are in rignt format for every fields in our schema
+//golden standard in back-end: to NEVER EVER accept input data as it is

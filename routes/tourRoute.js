@@ -1,5 +1,6 @@
 const tourController = require('./../controller/tourController');
 const express = require('express');
+const catchAsyncFn = require('../utils/catchAsync');
 
 const router = express.Router();
 
@@ -16,7 +17,12 @@ router
   .route('/5-Best-tour')
   .get(tourController.bestTours, tourController.getTours);
 
-router.route('/').get(tourController.getTours).post(tourController.createTour);
+router.route('/tour-stats').get(tourController.getTourStats);
+router.route('/monthly-plans/:year').get(tourController.getMonthlyPlan);
+router
+  .route('/')
+  .get(tourController.getTours)
+  .post(catchAsyncFn(tourController.createTour));
 
 router
   .route('/:ID')

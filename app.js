@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const morgan = require('morgan');
 
+const AppErrorClass = require('./utils/appError');
+const globalError = require('./controller/errorController');
 const tourRouter = require('./routes/tourRoute');
 const userRouter = require('./routes/userRoute');
 
@@ -254,4 +256,20 @@ app.listen(8000, '127.0.0.1', () =>
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 
+app.all('*', (req, res, next) => {
+  // res.status(404).json({
+  //   status: 'fail',
+  //   message: `can't find ${req.originalUrl} on this server`,
+  // });
+
+  //
+
+  // const err = new Error(`can't find ${req.originalUrl} on this server`);
+  // err.statusCode = 404;
+  // err.status = 'fail';
+  next(new AppErrorClass(`can't find ${req.originalUrl} on this server`, 404)); //when we pass any argument in next then express will automaticlly indentifies it's an error and skip all further middleware in the stack
+});
+
+//express error handler middleware
+app.use(globalError.errorController);
 module.exports = app;
