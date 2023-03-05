@@ -1,6 +1,7 @@
 const tourController = require('./../controller/tourController');
 const express = require('express');
 const catchAsyncFn = require('../utils/catchAsync');
+const authController = require('./../controller/authController');
 
 const router = express.Router();
 
@@ -21,13 +22,17 @@ router.route('/tour-stats').get(tourController.getTourStats);
 router.route('/monthly-plans/:year').get(tourController.getMonthlyPlan);
 router
   .route('/')
-  .get(tourController.getTours)
+  .get(authController.protect, tourController.getTours)
   .post(catchAsyncFn(tourController.createTour));
 
 router
   .route('/:ID')
   .get(tourController.getTour)
   .patch(tourController.updateTour)
-  .delete(tourController.deleteTour);
+  .delete(
+    authController.protect,
+    authController.authAdmin('admin', 'lead-guide'),
+    tourController.deleteTour
+  );
 
 module.exports = router;

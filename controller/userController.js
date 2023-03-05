@@ -1,9 +1,22 @@
-exports.getUsers = (req, res) => {
-  res.status(501).json({
-    status: 'error',
-    message: 'This route is not yet defined!',
-  });
+const User = require('./../models/userModel');
+const catchAsyncFn = require('../utils/catchAsync');
+const AppError = require('../utils/appError');
+
+//
+
+const filteredObj = (obj, ...allowedFields) => {
+  const newObj = {};
+
+  for (let key in obj) {
+    if (allowedFields.includes(key)) {
+      newObj[key] = obj[key];
+    }
+  }
+  // console.log(newObj);
+  return newObj;
 };
+
+//
 
 exports.createUser = (req, res) => {
   res.status(500).json({
@@ -12,6 +25,57 @@ exports.createUser = (req, res) => {
   });
 };
 
+//
+
+exports.getUsers = catchAsyncFn(async (req, res) => {
+  const users = await User.find();
+  res.status(200).json({
+    status: 'success',
+    data: {
+      users,
+    },
+  });
+});
+
+//
+
 exports.getUser = (req, res) => {
   res.send('This route is not yet defined!');
 };
+
+//
+
+exports.updateMe = catchAsyncFn(async (req, res, next) => {
+  // 1) send error if body conatin password property
+  if (req.body.password || req.body.passwordConfirm) {
+    return next(
+      new AppError(
+        'please do prefer "/updatePassowrd" path, in case you want to update your password',
+        401
+      )
+    );
+  }
+  // 2) Filterd out unwanted fields that are not allowed to be updated
+  const filteredBody = filteredObj(req.body, 'name', 'email');
+  console.log(req.user.id);
+  const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
+    new: true,
+    runValidators: true,
+  });
+
+  res.status(200).json({
+    status: 'success',
+    updatedUser,
+  });
+});
+
+//
+
+exports.deleteMe = catchAsyncFn(async (req, res, next) => {
+  await User.findByIdAndUpdate(req.user.id, { active: false });
+
+  res.status(204).json({
+    status: 'success',
+    data: null,
+  });
+});

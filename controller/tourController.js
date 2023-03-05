@@ -45,6 +45,8 @@ exports.getTours = catchAsyncFn(async (req, res, next) => {
 //
 
 exports.getTour = catchAsyncFn(async (req, res, next) => {
+  // console.log(req.params);
+
   const tour = await Tour.findById(req.params.ID);
   if (!tour) {
     return next(new AppError('No tour found with that ID', 404));
@@ -82,7 +84,7 @@ exports.updateTour = catchAsyncFn(async (req, res, next) => {
 
 //
 
-exports.deleteTour = catchAsyncFn(async (req, res) => {
+exports.deleteTour = catchAsyncFn(async (req, res, next) => {
   const deletedTour = await Tour.findByIdAndDelete(req.params.ID);
   if (!deletedTour) {
     return next(new AppError('No tour found with that ID', 404));
