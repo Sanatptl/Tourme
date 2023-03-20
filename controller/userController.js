@@ -1,6 +1,7 @@
 const User = require('./../models/userModel');
 const catchAsyncFn = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
+const handlerFunction = require('./handlerFunction');
 
 //
 
@@ -27,24 +28,28 @@ exports.createUser = (req, res) => {
 
 //
 
-exports.getUsers = catchAsyncFn(async (req, res) => {
-  const users = await User.find();
-  res.status(200).json({
-    status: 'success',
-    data: {
-      users,
-    },
-  });
-});
-
+exports.getUsers = handlerFunction.getAll(User);
+// exports.getUsers = catchAsyncFn(async (req, res) => {
+//   const users = await User.find();
+//   res.status(200).json({
+//     status: 'success',
+//     data: {
+//       users,
+//     },
+//   });
+// });
 //
 
-exports.getUser = (req, res) => {
-  res.send('This route is not yet defined!');
+//
+//get current loged-in user
+exports.getMe = (req, res, next) => {
+  req.params.ID = req.user.id;
+  next();
 };
 
 //
 
+//only for email and name
 exports.updateMe = catchAsyncFn(async (req, res, next) => {
   // 1) send error if body conatin password property
   if (req.body.password || req.body.passwordConfirm) {
@@ -79,3 +84,8 @@ exports.deleteMe = catchAsyncFn(async (req, res, next) => {
     data: null,
   });
 });
+
+//
+exports.updateUser = handlerFunction.updateOne(User);
+exports.getOneUser = handlerFunction.getOne(User);
+exports.deleteUser = handlerFunction.deleteOne(User);

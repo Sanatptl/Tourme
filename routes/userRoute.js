@@ -10,15 +10,21 @@ router.post('/signup', authController.signUp); // kind of special route that doe
 router.post('/login', authController.login);
 router.post('/forgotPassword', authController.forgotPassword);
 router.patch('/resetPassword/:token', authController.resetPassword);
-router.patch(
-  '/updatePassword',
-  authController.protect,
-  authController.updatePassword
-);
-router.patch('/updateMe', authController.protect, userController.updateMe);
-router.delete('/deleteMe', authController.protect, userController.deleteMe);
 
+router.use(authController.protect); // basically protect all the routes that comes after this middleware
+
+router.patch('/updatePassword', authController.updatePassword);
+router.get('/me', userController.getMe, userController.getOneUser);
+router.patch('/updateMe', userController.updateMe);
+router.delete('/deleteMe', userController.deleteMe);
+
+router.use(authController.authAdmin('admin'));
 router.route('/').get(userController.getUsers).post(userController.createUser);
-router.route('/:ID').get(userController.getUser);
+
+router
+  .route('/:ID')
+  .get(userController.getOneUser)
+  .patch(userController.updateUser)
+  .delete(userController.deleteUser);
 
 module.exports = router;

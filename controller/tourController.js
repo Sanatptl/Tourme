@@ -1,8 +1,8 @@
 const Tour = require('./../models/tourModel');
 // import APIfeatures from './../utils/apiFeatures';
-const APIfeatures = require('./../utils/apiFeatures');
 const catchAsyncFn = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
+const handlerFunction = require('./handlerFunction');
 
 //
 
@@ -15,84 +15,62 @@ exports.bestTours = (req, res, next) => {
 
 //
 
-exports.createTour = async (req, res, next) => {
-  const newTour = await Tour.create(req.body);
-  res.status(201).json({
-    status: 'success',
-    data: {
-      tour: newTour,
-    },
-  });
-};
+exports.createTour = handlerFunction.createOne(Tour);
 
 //
 
-exports.getTours = catchAsyncFn(async (req, res, next) => {
-  const api = new APIfeatures(Tour.find(), req.query);
-  api.filter().sort().page().fields();
+exports.getTours = handlerFunction.getAll(Tour);
+// exports.getTours = catchAsyncFn(async (req, res, next) => {
+//   const api = new APIfeatures(Tour.find(), req.query);
+//   api.filter().sort().page().fields();
 
-  const tours = await api.query; // put 'await' here bcz we are not able to use sort, limit like methods directaly on promise if it is fullfilled
+//   const tours = await api.query; // put 'await' here bcz we are not able to use sort, limit like methods directaly on promise if it is fullfilled
 
-  res.status(200).json({
-    status: 'success',
-    results: tours.length,
-    data: {
-      tours,
-    },
-  });
-});
-
-//
-
-exports.getTour = catchAsyncFn(async (req, res, next) => {
-  // console.log(req.params);
-
-  const tour = await Tour.findById(req.params.ID);
-  if (!tour) {
-    return next(new AppError('No tour found with that ID', 404));
-  }
-  res.status(200).json({
-    status: 'success',
-    data: {
-      tour,
-    },
-  });
-
-  // console.log(req.params);
-});
+//   res.status(200).json({
+//     status: 'success',
+//     results: tours.length,
+//     data: {
+//       tours,
+//     },
+//   });
+// });
 
 //
 
-exports.updateTour = catchAsyncFn(async (req, res, next) => {
-  const updatedTour = await Tour.findByIdAndUpdate(
-    req.params.ID,
-    req.body,
-    {
-      new: true,
-      runValidators: true,
-    },
-    (err, doc) => {
-      if (err) throw err;
-      console.log(doc);
-    }
-  );
-  res.status(201).json({
-    status: 'success',
-    data: updatedTour,
-  });
-});
+exports.getOneTour = handlerFunction.getOne(Tour, { path: 'reviews' });
+// exports.getTour = catchAsyncFn(async (req, res, next) => {
+//   // console.log(req.params);
+
+//   const tour = await Tour.findById(req.params.ID).populate('reviews');
+//   if (!tour) {
+//     return next(new AppError('No tour found with that ID', 404));
+//   }
+//   res.status(200).json({
+//     status: 'success',
+//     data: {
+//       tour,
+//     },
+//   });
+
+//   // console.log(req.params);
+// });
 
 //
 
-exports.deleteTour = catchAsyncFn(async (req, res, next) => {
-  const deletedTour = await Tour.findByIdAndDelete(req.params.ID);
-  if (!deletedTour) {
-    return next(new AppError('No tour found with that ID', 404));
-  }
-  res.status(204).json({
-    status: 'success',
-  });
-});
+exports.updateTour = handlerFunction.updateOne(Tour);
+
+//
+
+exports.deleteTour = handlerFunction.deleteOne(Tour);
+// exports.deleteTour = catchAsyncFn(async (req, res, next) => {
+//   const deletedTour = await Tour.findByIdAndDelete(req.params.ID);
+//   if (!deletedTour) {
+//     return next(new AppError('No tour found with that ID', 404));
+//   }
+//   res.status(204).json({
+//     status: 'success',
+//   });
+// });
 
 //
 
@@ -160,3 +138,42 @@ exports.getMonthlyPlan = catchAsyncFn(async (req, res, next) => {
     data: plan,
   });
 });
+
+//
+
+exports.getTourWithin = catchAsyncFn(async (req, res, next) => {
+  const { distance, unit, latlng } = req.params;
+  const [lat, lng] = latlng.split(',');
+
+  //convert to a special unit called radian
+  const radius = unit === 'mi' ? distance / 3963.2 : distance / 6378.1;
+
+  if (!lat || !lng) {
+    next(
+      new AppError(
+        'Please provide latitutr and longitude in the format lat,lng.',
+        400
+      )
+    );
+  }
+
+  const tours = await Tour.find({
+    startLocation: { $geoWithin: { $centerSphere: [[lng, lat], radius] } },
+  });
+
+  res.status(200).json({
+    status: 'success',
+    results: tours.length,
+    data: {
+      data: tours,
+    },
+  });
+});
+
+//reviewcontroller
+exports.updateRating = async function (id, rating, quantity) {
+  await Tour.findByIdAndUpdate(id, {
+    ratingsAverage: rating,
+    ratingsQuantity: quantity,
+  });
+};
