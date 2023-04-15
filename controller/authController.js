@@ -23,6 +23,9 @@ const sendToken = (user, statusCode, res) => {
     ),
     // secure: true,
     httpOnly: true,
+    // sameSite: 'none',
+    domain: '127.0.0.1',
+    path: '/',
   };
 
   if (process.env.NODE_ENV === 'production') cookieOption.secure = true;
@@ -38,6 +41,7 @@ const sendToken = (user, statusCode, res) => {
     },
   });
 };
+
 //
 
 exports.signUp = catchAsyncFn(async (req, res, next) => {
@@ -85,12 +89,16 @@ exports.login = catchAsyncFn(async (req, res, next) => {
 exports.protect = catchAsyncFn(async (req, res, next) => {
   // 1) getting token and check if it's exist
   let token;
+
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith('Bearer')
   ) {
     token = req.headers.authorization.split(' ')[1];
+  } else if (req.cookies.jwt) {
+    token = req.cookies.jwt;
   }
+  console.log(token);
   if (!token)
     return next(
       new AppError("you're not logged in! please log in to get access.", 401)
@@ -229,4 +237,51 @@ exports.updatePassword = async (req, res, next) => {
 
   // 4) let log in , send jwt
   sendToken(user, 200, res);
+};
+
+//
+
+exports.isLoggedIn = catchAsyncFn(async (req, res, next) => {
+  // 1) getting token and check if it's exist
+
+  if (!req.cookies.jwt)
+    return next(
+      new AppError("you're not logged in! please log in to get access.", 401)
+    );
+
+  // 2) validate token(varification) : to verify if someone has manipulate the payload or token has expired or not
+  const decoded = await promisify(jwt.verify)(
+    req.cookies.jwt,
+    process.env.JWT_SECRET
+  );
+  // console.log(decoded); //payload object
+
+  // 3) check if user still exist
+  const userPresentInDB = await User.findById(decoded.id);
+  // console.log(userPresentInDB);
+
+  if (!userPresentInDB) {
+    return next(
+      new AppError('The user beloging to this token does no longer exist!', 401)
+    );
+  }
+  // 4) if user changed password after token was issued
+  if (userPresentInDB.checkPasswordChanged(decoded.iat)) {
+    return next(new AppError('User recently changed password', 401));
+  }
+  res.status(200).json({ satus: 'success', data: userPresentInDB });
+  // console.log(req.user);
+});
+
+//
+
+exports.logOut = (req, res, next) => {
+  //here we basicly override the jwt token
+  res.cookie('jwt', 'logout', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  });
+  res.status(200).json({
+    status: 'success',
+  });
 };

@@ -7,7 +7,9 @@ const authController = require('./../controller/authController');
 const router = express.Router();
 
 router.post('/signup', authController.signUp); // kind of special route that does't need to fit into REST philosophy
+router.get('/isLoggedIn', authController.isLoggedIn);
 router.post('/login', authController.login);
+router.get('/logout', authController.logOut);
 router.post('/forgotPassword', authController.forgotPassword);
 router.patch('/resetPassword/:token', authController.resetPassword);
 
