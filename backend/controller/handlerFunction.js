@@ -1,6 +1,6 @@
-const catchAsyncFn = require('../../../utils/catchAsync');
-const AppError = require('../../../utils/appError');
-const APIfeatures = require('../../../utils/apiFeatures');
+const catchAsyncFn = require('../utils/catchAsync');
+const AppError = require('../utils/appError');
+const APIfeatures = require('../utils/apiFeatures');
 
 //
 

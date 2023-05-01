@@ -11,6 +11,7 @@ const xss = require('xss-clean');
 const hpp = require('hpp');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const compression = require('compression');
 
 const AppError = require('./utils/appError');
 const globalError = require('./controller/errorController');
@@ -79,6 +80,9 @@ app.use(
   })
 );
 
+//compress response text/data
+app.use(compression());
+
 // Body parser, reading data from body into req.body
 // app.use(bodyParser.json({ strict: true, limit: '10kb' })); //middleware
 // app.use(express.urlencoded({ extended: true, limit: '10kb' }));
@@ -87,7 +91,7 @@ app.use(express.static(`${__dirname}/public`)); //provide a way to load static f
 
 // for testing purpose middleware
 app.use((req, res, next) => {
-  console.log(req.cookies);
+  // console.log(req.cookies);
   next();
 });
 
