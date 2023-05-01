@@ -1,6 +1,5 @@
 const tourController = require('./../controller/tourController');
 const express = require('express');
-const catchAsyncFn = require('../utils/catchAsync');
 const authController = require('./../controller/authController');
 // const reviewController = require('./../controller/reviewController');
 const reviewRouter = require('./reviewRoute');
@@ -63,6 +62,8 @@ router
   .patch(
     authController.protect,
     authController.authAdmin('admin', 'lead-guide'),
+    tourController.uploadTourImages,
+    tourController.resizeTourImages,
     tourController.updateTour
   )
   .delete(

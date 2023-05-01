@@ -1,4 +1,13 @@
-import { Header, Footer, Tour, Login, Home, Account, ErrorPage } from './';
+import {
+  Header,
+  Footer,
+  Tour,
+  Login,
+  Home,
+  Account,
+  ErrorPage,
+  Signup,
+} from './';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // import axios from 'axios';
 import AuthProvider from '../contexts/userAuth';
@@ -20,6 +29,7 @@ const App = () => {
                 </TourProvider>
               }
             ></Route>
+            <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />}></Route>
             <Route path="/me" element={<Account />} />
             <Route

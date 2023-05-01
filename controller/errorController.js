@@ -1,9 +1,20 @@
 const mongoose = require('mongoose');
 const AppError = require('./../utils/appError');
 
+//
+
 const handleCastErrDB = (err) => {
   const msg = `Invalid ${err.path} ${err.value}`;
   return new AppError(msg, 400);
+};
+
+//
+
+const handleValidationErrDB = (err) => {
+  const errors = err.errors;
+  for (const path in errors) {
+    return new AppError(`${errors[path].message}`, 400);
+  }
 };
 
 //
@@ -27,7 +38,14 @@ const handleTokenExpiredError = () =>
 //
 
 const sendErrorDev = (err, res) => {
-  console.log(err);
+  // if (err instanceof mongoose.Error.ValidationError) {
+  //   const errors = err.errors;
+  //   for (const path in errors) {
+  //     res
+  //       .status(err.statusCode)
+  //       .json({ message: `${path}: ${errors[path].message}` });
+  //   }
+  // }
   res.status(err.statusCode).json({
     status: err.status,
     error: err,
@@ -69,6 +87,9 @@ exports.errorController = (err, req, res, next) => {
     // console.log(err);
     // let error = { ...err };
     // console.log(error);
+    if (err instanceof mongoose.Error.ValidationError)
+      err = handleValidationErrDB(err);
+
     if (err.name === 'CastError') {
       // if (err instanceof mongoose.CastError) {
       err = handleCastErrDB(err);

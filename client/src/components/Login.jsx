@@ -5,6 +5,7 @@ import { useCookies } from 'react-cookie';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from '../contexts/userAuth';
+import FormInput from './FormInputs';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -62,60 +63,48 @@ const Login = () => {
 
   return (
     <>
-      <div className="relative inset-0 bg-white bg-opacity-50 flex items-center justify-center z-50 ">
-        <div className="shadow-lg">
-          <main className="main">
-            <div className="login-form">
-              <h2 className="heading-secondary ma-bt-lg">
-                Log into your account
-              </h2>
-              <form
-                action=""
-                className="form form--login"
-                onSubmit={handleSubmit}
-              >
-                <div className="form__group">
-                  <label htmlFor="email" className="form__label">
-                    Email address
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="form__input"
-                    placeholder="you@example.com"
-                  />
-                </div>
-                <div className="form__group ma-bt-md">
-                  <label htmlFor="password" className="form__label">
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    id="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="form__input"
-                    placeholder="********"
-                  />
-                </div>
-                <div className="form__group flex fl">
-                  <button type="submit" className="btn btn--green mr-16">
-                    Login
-                  </button>
-                  <button
-                    className="btn bg-gray-200 ml-16"
-                    onClick={goBackPage}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            </div>
-          </main>
-        </div>
+      <div className="relative inset-0 bg-white bg-opacity-50 flex items-center justify-center z-50 "></div>
+      <div className="shadow-lg">
+        <main className="main">
+          <div className="login-form">
+            <h2 className="heading-secondary ma-bt-lg">
+              Log into your account
+            </h2>
+            <form
+              action=""
+              className="form form--login"
+              onSubmit={handleSubmit}
+            >
+              <FormInput
+                label="Email address"
+                id="email"
+                type="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <FormInput
+                label="Password"
+                id="password"
+                type="password"
+                value={password}
+                placeholder="********"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+
+              <div className="form__group">
+                <button type="submit" className="btn btn--green mr-16">
+                  Login
+                </button>
+                <button className="btn bg-gray-200 ml-16" onClick={goBackPage}>
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </main>
       </div>
+
       <ToastContainer
         position="top-center"
         autoClose={3000}

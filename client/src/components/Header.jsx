@@ -1,16 +1,22 @@
-import React from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useCookies } from 'react-cookie';
 import { useAuth } from '../contexts/userAuth';
+import KebabMenu from './KebabMenu';
 
 const Header = () => {
   // const openLoginModal = toggleLoginHandler(showLogin, setShowLogin, toggle);
   const navigate = useNavigate();
   const [, setCookie] = useCookies(['jwt']);
   const { isLoggedIn, user, setIsLoggedIn } = useAuth();
+  const [isActive, setIsActive] = useState(false);
+
+  const handleClick = () => {
+    setIsActive(!isActive);
+  };
 
   return (
     <div>
@@ -32,10 +38,12 @@ const Header = () => {
             />
           </form> */}
         </nav>
+        <KebabMenu />
         <div className="header__logo">
           <img src="/img/logo-white.png" alt="Natours logo" />
         </div>
-        <nav className="nav nav--user">
+        <KebabMenu onClick={handleClick} isActive={isActive} />
+        <nav className={`nav nav--user ${isActive && 'open'}`}>
           {isLoggedIn ? (
             <LoggedIn
               user={user}
@@ -94,7 +102,9 @@ function LoggedIn({ user, setIsLoggedIn, navigate, setCookie }) {
           alt="User photo"
           className="nav__user-img"
         />
-        <span className="text-blue-500">{user.name.split(' ')[0]}</span>
+        <span className="text-blue-500 hidden md:inline">
+          {user.name.split(' ')[0]}
+        </span>
       </Link>
     </>
   );
@@ -103,11 +113,13 @@ function LoggedIn({ user, setIsLoggedIn, navigate, setCookie }) {
 function LoggedOut() {
   return (
     <>
-      <button className="nav__el">
+      <button className="nav__el nav_list">
         <Link to="/login">Log in</Link>
       </button>
 
-      <button className="nav__el nav__el--cta">Sign up</button>
+      <button className="nav__el nav__el--cta nav_list">
+        <Link to="/signup">Sign up</Link>
+      </button>
     </>
   );
 }

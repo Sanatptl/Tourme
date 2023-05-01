@@ -2,12 +2,16 @@ import React, { useEffect, useState } from 'react';
 import Card from './Card';
 import axios from 'axios';
 
-const TourOverviewPage = ({ setTourDetails, setShowTour, isLoggedIn }) => {
-  const [tours, setTours] = useState([]);
+const TourOverviewPage = () => {
+  const [tours, setTours] = useState(
+    JSON.parse(localStorage.getItem('toursData')) || []
+  );
+
   useEffect(() => {
-    axios
-      .get('http://localhost:8000/api/v1/tours?limit=10')
-      .then((res) => setTours(res.data.data.data));
+    axios.get('http://localhost:8000/api/v1/tours?limit=10').then((res) => {
+      localStorage.setItem('toursData', JSON.stringify(res.data.data.data));
+      setTours(res.data.data.data);
+    });
     //   .then((res) => console.log(res.data.data.data));
   }, []);
 

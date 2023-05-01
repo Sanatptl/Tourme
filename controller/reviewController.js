@@ -1,4 +1,3 @@
-const catchAsyncFn = require('../utils/catchAsync');
 const Review = require('./../models/reviewModel');
 const handlerFunction = require('./handlerFunction');
 

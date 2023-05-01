@@ -21,9 +21,8 @@ const sendToken = (user, statusCode, res) => {
     expires: new Date(
       Date.now() + process.env.COOKIES_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
-    // secure: true,
     httpOnly: true,
-    // sameSite: 'none',
+    sameSite: true,
     domain: '127.0.0.1',
     path: '/',
   };
@@ -45,13 +44,15 @@ const sendToken = (user, statusCode, res) => {
 //
 
 exports.signUp = catchAsyncFn(async (req, res, next) => {
-  //   const newUser = await User.create(req.body);//deprecated bcz anyone can defined the role as admin
-  const newUser = await User.create({
+  const bodyObj = {
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
-  });
+  };
+  if (req.file) bodyObj.photo = req.file.filename;
+  //   const newUser = await User.create(req.body);//deprecated bcz anyone can defined the role as admin
+  const newUser = await User.create(bodyObj);
 
   sendToken(newUser, 201, res);
 });
@@ -98,7 +99,6 @@ exports.protect = catchAsyncFn(async (req, res, next) => {
   } else if (req.cookies.jwt) {
     token = req.cookies.jwt;
   }
-  console.log(token);
   if (!token)
     return next(
       new AppError("you're not logged in! please log in to get access.", 401)
@@ -219,24 +219,27 @@ exports.resetPassword = catchAsyncFn(async (req, res, next) => {
 //
 
 exports.updatePassword = async (req, res, next) => {
-  // 1)Get user from DB
-  const user = await User.findById(req.user.id).select('+password');
+  try {
+    // 1)Get user from DB
+    const user = await User.findById(req.user.id).select('+password');
 
-  // 2) check pass is correect or not
-  if (
-    !(await user.isPasswordCorrect(req.body.currentPassword, user.password))
-  ) {
-    return next(
-      new AppError('incorrect password, please enter correct one', 401)
-    );
+    // 2) check pass is correect or not
+    if (
+      !(await user.isPasswordCorrect(req.body.currentPassword, user.password))
+    ) {
+      return next(
+        new AppError('incorrect password, please enter correct one', 401)
+      );
+    }
+    // 3) if so, update pass
+    user.password = req.body.newPassword;
+    user.passwordConfirm = req.body.confirmPassword;
+    await user.save();
+    // 4) let log in , send jwt
+    sendToken(user, 200, res);
+  } catch (err) {
+    return next(new AppError(err.message, 401));
   }
-  // 3) if so, update pass
-  user.Password = req.body.newPassword;
-  user.passwordConfirm = req.body.confirmPassword;
-  await user.save();
-
-  // 4) let log in , send jwt
-  sendToken(user, 200, res);
 };
 
 //

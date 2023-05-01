@@ -8,6 +8,7 @@ import TourOverviewPage from './TourOverviewPage';
 import Home from './Home';
 import Account from './Account';
 import ErrorPage from './ErrorPage';
+import Signup from './Signup';
 
 export {
   Header,
@@ -20,4 +21,5 @@ export {
   Home,
   Account,
   ErrorPage,
+  Signup,
 };

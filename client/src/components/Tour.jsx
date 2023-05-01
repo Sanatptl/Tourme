@@ -12,38 +12,6 @@ const Tour = () => {
   // });
   return (
     <>
-      {/*   
-      <section className="section-header">
-        <div className="header__hero">
-          <div className="header__hero-overlay"> &nbsp</div>
-          <img src="" alt="tour.imagecover" className="header__hero-img" />
-        </div>
-
-        <div className="heading-box">
-          <h1 className="heading-primary">
-            <span>{`${tourname} tour`}</span>
-          </h1>
-          <div className="heading-box__group">
-            <div className="heading-box__detail">
-              <svg className="heading-box__icom">
-                <use xlink:href="/img/icons.svg#icon-clock"></use>
-              </svg>
-              <span className="heading-box__text">{`${tour.duration} days`}</span>
-            </div>
-            <div className="heading-box__detail">
-              <svg className="heading-box__icom">
-                <use xlink:href="/img/icons.svg#icon-map-pin"></use>
-              </svg>
-              <span className="heading-box__text">
-                tor.starlocation.decription
-              </span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="section-description"></section> */}
-      {/* <div className="absolute top-2/4 left-2/4 z-[100] translate-[50%,50%]"> */}
       <div className="">
         <section className="section-header">
           <div className="header__hero">

@@ -30,16 +30,16 @@ const reviewRouter = require('./routes/reviewRoute');
 const app = express();
 
 ///////////////Middleware/////////////////
+app.use(express.json()); //middleware (to get req body object)
 
 //allow access to cors
 // Make sure you have added the cors middleware to your Express app before any other middleware that might send responses (such as body parsers or error handlers). This is important because the cors middleware needs to set the appropriate headers on the response before it is sent to the client.
 // app.use(cors({ origin: '*' })); //allow to all
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: ['http://localhost:5173'],
     methods: ['PUT', 'GET', 'POST', 'DELETE', 'PATCH'],
     credentials: true,
-    // allowedHeaders: ['Content-Type', 'application/json'],
   })
 );
 
@@ -80,14 +80,13 @@ app.use(
 );
 
 // Body parser, reading data from body into req.body
-// app.use(express.json()); //middleware (to get req body object)
-app.use(bodyParser.json({ strict: true, limit: '10kb' })); //middleware
+// app.use(bodyParser.json({ strict: true, limit: '10kb' })); //middleware
+// app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use(cookieParser());
 app.use(express.static(`${__dirname}/public`)); //provide a way to load static file (e.g. html,img etc)
 
 // for testing purpose middleware
 app.use((req, res, next) => {
-  // console.log(req.headers);
   console.log(req.cookies);
   next();
 });
