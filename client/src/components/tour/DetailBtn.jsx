@@ -1,8 +1,8 @@
-import { getTourDetail } from '../utils';
-import { useNavigate } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
-import { useTours } from '../contexts/TourContext';
-import { useAuth } from '../contexts/userAuth';
+import { getTourDetail } from "../../utils";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import { useTours } from "../../contexts/TourContext";
+import { useAuth } from "../../contexts/userAuth";
 
 const DetailBtn = ({ tourId }) => {
   const navigate = useNavigate();
@@ -14,14 +14,14 @@ const DetailBtn = ({ tourId }) => {
       if (isLoggedIn) {
         getTourDetail(id, setTourDetails, setShowTour);
         setTimeout(() => {
-          navigate('/tour');
+          navigate("/tour");
         }, 1500);
       } else {
         toast.error(
           "You're not logged in, please Log in to view Detailed tour page!"
         );
         setTimeout(() => {
-          navigate('/login');
+          navigate("/login");
         }, 1500);
       }
     };

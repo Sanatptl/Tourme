@@ -1,14 +1,14 @@
-import Header from './Header';
-import Footer from './Footer';
-import OverviewPage from './Overview';
-import Card from './Card';
-import Login from './Login';
-import Tour from './Tour';
-import TourOverviewPage from './TourOverviewPage';
-import Home from './Home';
-import Account from './Account';
-import ErrorPage from './ErrorPage';
-import Signup from './Signup';
+import Header from "./header/Header";
+import Footer from "./footer/Footer";
+import OverviewPage from "./tour/Overview";
+import Card from "./tour/Card";
+import Login from "./user_account/Login";
+import Tour from "./tour/Tour";
+import TourOverviewPage from "./tour/TourOverviewPage";
+import Home from "./overview/Home";
+import Account from "./user_account/Account";
+import ErrorPage from "./alert_error/ErrorPage";
+import Signup from "./user_account/Signup";
 
 export {
   Header,

@@ -1,16 +1,16 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { useCookies } from 'react-cookie';
-import { useAuth } from '../contexts/userAuth';
-import KebabMenu from './KebabMenu';
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useCookies } from "react-cookie";
+import { useAuth } from "../../contexts/userAuth";
+import KebabMenu from "./KebabMenu";
 
 const Header = () => {
   // const openLoginModal = toggleLoginHandler(showLogin, setShowLogin, toggle);
   const navigate = useNavigate();
-  const [, setCookie] = useCookies(['jwt']);
+  const [, setCookie] = useCookies(["jwt"]);
   const { isLoggedIn, user, setIsLoggedIn } = useAuth();
   const [isActive, setIsActive] = useState(false);
 
@@ -43,7 +43,7 @@ const Header = () => {
           <img src="/img/logo-white.png" alt="Natours logo" />
         </div>
         <KebabMenu onClick={handleClick} isActive={isActive} />
-        <nav className={`nav nav--user ${isActive && 'open'}`}>
+        <nav className={`nav nav--user ${isActive && "open"}`}>
           {isLoggedIn ? (
             <LoggedIn
               user={user}
@@ -74,14 +74,14 @@ const Header = () => {
 
 function logout(setIsLoggedIn, navigate, setCookie) {
   return () => {
-    axios.get('http://127.0.0.1:8000/api/v1/users/logout').then((res) => {
+    axios.get("http://127.0.0.1:8000/api/v1/users/logout").then((res) => {
       if (res.status === 200) toast.success("You're Logged out!");
-      setCookie('jwt', 'logout', {
-        path: '/',
+      setCookie("jwt", "logout", {
+        path: "/",
         expires: new Date(Date.now() + 10 * 1000),
       });
       setIsLoggedIn(false);
-      navigate('/');
+      navigate("/");
     });
   };
 }
@@ -103,7 +103,7 @@ function LoggedIn({ user, setIsLoggedIn, navigate, setCookie }) {
           className="nav__user-img"
         />
         <span className="text-blue-500 hidden md:inline">
-          {user.name.split(' ')[0]}
+          {user.name.split(" ")[0]}
         </span>
       </Link>
     </>

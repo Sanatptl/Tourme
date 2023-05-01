@@ -1,40 +1,40 @@
-import { useState } from 'react';
-import { useAuth } from '../contexts/userAuth';
-import axios from 'axios';
-import AlertWindow from './AlertWindow';
+import { useState } from "react";
+import { useAuth } from "../../contexts/userAuth";
+import axios from "axios";
+import AlertWindow from "../alert_error/AlertWindow";
 
 const AccSettings = () => {
   const { user } = useAuth();
   const [name, setName] = useState(user.name);
   const [email, setEmail] = useState(user.email);
   const [file, setFile] = useState(null);
-  const [type, setType] = useState('');
-  const [msg, setMsg] = useState('');
+  const [type, setType] = useState("");
+  const [msg, setMsg] = useState("");
   const [show, setShow] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const data = new FormData();
-    data.append('name', name);
-    data.append('email', email);
-    data.append('photo', file);
+    data.append("name", name);
+    data.append("email", email);
+    data.append("photo", file);
 
-    fetch('http://127.0.0.1:8000/api/v1/users/updateMe', {
-      method: 'PATCH',
+    fetch("http://127.0.0.1:8000/api/v1/users/updateMe", {
+      method: "PATCH",
       body: data,
-      credentials: 'include',
-      mode: 'cors',
+      credentials: "include",
+      mode: "cors",
     })
       .then((response) => response.json())
       .then((data) => {
-        if (data.status === 'success') {
-          setMsg('Profile updated successfully!');
-          setType('success');
+        if (data.status === "success") {
+          setMsg("Profile updated successfully!");
+          setType("success");
         }
-        if (data.status === 'fail') {
+        if (data.status === "fail") {
           setMsg(data.message);
-          setType('error');
+          setType("error");
         }
         setTimeout(() => {
           window.location.reload();
@@ -42,7 +42,7 @@ const AccSettings = () => {
       })
       .catch((err) => {
         setMsg(err.message);
-        setType('error');
+        setType("error");
         console.log(err);
       })
       .finally(() => {

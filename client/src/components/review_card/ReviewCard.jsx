@@ -15,7 +15,7 @@ const ReviewCard = ({ photo, name, review, rating }) => {
           <svg
             key={star}
             className={`reviews__star reviews__star--${
-              rating >= star ? 'active' : 'inactive'
+              rating >= star ? "active" : "inactive"
             }`}
           >
             <use xlinkHref="/img/icons.svg#icon-star" />

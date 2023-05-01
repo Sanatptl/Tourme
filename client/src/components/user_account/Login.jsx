@@ -1,17 +1,17 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { useCookies } from 'react-cookie';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { useAuth } from '../contexts/userAuth';
-import FormInput from './FormInputs';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useCookies } from "react-cookie";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useAuth } from "../../contexts/userAuth";
+import FormInput from "./FormInputs";
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const [, setCookie] = useCookies(['jwt']);
+  const [, setCookie] = useCookies(["jwt"]);
   const { setIsLoggedIn, setUser } = useAuth();
   // const closeLoginModal = () => {
   //   document.body.style.overflowY = 'visible';
@@ -35,21 +35,21 @@ const Login = () => {
       //   config
       // );
       const result = await axios({
-        method: 'post',
-        url: 'http://127.0.0.1:8000/api/v1/users/login',
+        method: "post",
+        url: "http://127.0.0.1:8000/api/v1/users/login",
         data: {
           email,
           password,
         },
         withCredentials: true,
       });
-      setCookie('jwt', result.data.token, { path: '/' });
+      setCookie("jwt", result.data.token, { path: "/" });
       // console.log(result);
       setUser(result.data.data.user);
       setIsLoggedIn(true);
-      toast.success('Login successfully!');
+      toast.success("Login successfully!");
       setTimeout(() => {
-        navigate('/');
+        navigate("/");
       }, 3000);
     } catch (err) {
       // console.log(err);
@@ -58,7 +58,7 @@ const Login = () => {
   };
 
   const goBackPage = () => {
-    navigate('/');
+    navigate("/");
   };
 
   return (

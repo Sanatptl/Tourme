@@ -1,8 +1,8 @@
-import React from 'react';
-import Guides from './Guides';
-import Overview from './Overview';
-import ReviewCard from './ReviewCard';
-import { useTours } from '../contexts/TourContext';
+import React from "react";
+import Guides from "./Guides";
+import Overview from "./Overview";
+import ReviewCard from "../review_card/ReviewCard";
+import { useTours } from "../../contexts/TourContext";
 
 const Tour = () => {
   const { tourDetails } = useTours();
@@ -50,30 +50,30 @@ const Tour = () => {
               <div className="overview-box__group">
                 <h2 className="heading-secondary ma-bt-lg">Quick facts</h2>
                 <Overview
-                  label={'Next date'}
+                  label={"Next date"}
                   text={new Date(tourDetails.startDates[0]).toLocaleString(
-                    'en-IN',
+                    "en-IN",
                     {
-                      month: 'long',
-                      year: 'numeric',
+                      month: "long",
+                      year: "numeric",
                     }
                   )}
-                  icon={'calender'}
+                  icon={"calender"}
                 />
                 <Overview
-                  label={'Difficulty'}
+                  label={"Difficulty"}
                   text={tourDetails.difficulty}
-                  icon={'trending-up'}
+                  icon={"trending-up"}
                 />
                 <Overview
-                  label={'Participants'}
+                  label={"Participants"}
                   text={tourDetails.maxGroupSize}
-                  icon={'user'}
+                  icon={"user"}
                 />
                 <Overview
-                  label={'Rating'}
+                  label={"Rating"}
                   text={`${tourDetails.ratingsAverage} / 5`}
-                  icon={'calender'}
+                  icon={"calender"}
                 />
               </div>
               <div className="overview-box__group">
@@ -91,7 +91,7 @@ const Tour = () => {
           </div>
           <div className="description-box">
             <h2 className="heading-secondary ma-bt-lg">{`About ${tourDetails.name} tour`}</h2>
-            {tourDetails.description.split('\n').map((p, i = 0) => {
+            {tourDetails.description.split("\n").map((p, i = 0) => {
               i++;
               return (
                 <p key={i} className="description__text">

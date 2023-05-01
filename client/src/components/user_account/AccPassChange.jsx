@@ -1,19 +1,19 @@
-import { useState } from 'react';
-import axios from 'axios';
-import { useCookies } from 'react-cookie';
-import { useErr } from '../contexts/ErrContext';
-import { useNavigate } from 'react-router-dom';
-import ErrorPage from './ErrorPage';
-import AlertWindow from './AlertWindow';
+import { useState } from "react";
+import axios from "axios";
+import { useCookies } from "react-cookie";
+import { useErr } from "../../contexts/ErrContext";
+import { useNavigate } from "react-router-dom";
+import ErrorPage from "../alert_error/ErrorPage";
+import AlertWindow from "../alert_error/AlertWindow";
 
 const AccPassChange = () => {
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [show, setShow] = useState(false);
-  const [msg, setMsg] = useState('');
-  const [, setCookie] = useCookies(['jwt']);
-  const [type, setType] = useState('');
+  const [msg, setMsg] = useState("");
+  const [, setCookie] = useCookies(["jwt"]);
+  const [type, setType] = useState("");
   // const { setError, error } = useErr();
   // const navigate = useNavigate();
   // console.log(newPassword);
@@ -21,22 +21,22 @@ const AccPassChange = () => {
     try {
       e.preventDefault();
       if (!currentPassword || !newPassword || !confirmPassword) {
-        throw new Error('Please fill up required fields');
+        throw new Error("Please fill up required fields");
       }
 
       const result = await axios({
-        method: 'PATCH',
-        url: 'http://127.0.0.1:8000/api/v1/users/updatePassword',
+        method: "PATCH",
+        url: "http://127.0.0.1:8000/api/v1/users/updatePassword",
         data: { currentPassword, newPassword, confirmPassword },
         withCredentials: true,
         // headers: {
         //   'Content-Type': 'application/json', // Set Content-Type header
         // },
       });
-      setCookie('jwt', result.data.token, { path: '/' });
-      if (result.data.status === 'success') {
-        setMsg('Data updated successfully!');
-        setType('success');
+      setCookie("jwt", result.data.token, { path: "/" });
+      if (result.data.status === "success") {
+        setMsg("Data updated successfully!");
+        setType("success");
       }
     } catch (err) {
       console.log(err);
@@ -45,7 +45,7 @@ const AccPassChange = () => {
       } else {
         setMsg(err.message);
       }
-      setType('error');
+      setType("error");
       // navigate('/error');
     } finally {
       setShow(true);

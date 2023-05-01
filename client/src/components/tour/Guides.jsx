@@ -6,10 +6,10 @@ const Guides = ({ photo, name, role }) => {
         src={`/img/users/${photo}`}
         alt={name}
       />
-      {role === 'lead-guide' && (
+      {role === "lead-guide" && (
         <span className="overview-box__label">Lead guide</span>
       )}
-      {role === 'guide' && (
+      {role === "guide" && (
         <span className="overview-box__label">Tour guide</span>
       )}
       <span className="overview-box__text">{name}</span>

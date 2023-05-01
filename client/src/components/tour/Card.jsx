@@ -1,4 +1,4 @@
-import DetailBtn from './DetailBtn';
+import DetailBtn from "./DetailBtn";
 
 const Card = (props) => {
   return (

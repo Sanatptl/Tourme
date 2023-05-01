@@ -1,5 +1,5 @@
-import React from 'react';
-import { Header, TourOverviewPage, Footer } from './';
+import React from "react";
+import { TourOverviewPage } from "../index";
 const Home = () => {
   return (
     <>

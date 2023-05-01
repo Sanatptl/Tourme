@@ -1,8 +1,8 @@
-import React from 'react';
-import AccSidebar from './AccSidebar';
-import AccSettings from './AccSettings';
-import AccPassChange from './AccPassChange';
-import AlertWindow from './AlertWindow';
+import React from "react";
+import AccSidebar from "./AccSidebar";
+import AccSettings from "./AccSettings";
+import AccPassChange from "./AccPassChange";
+import AlertWindow from "../alert_error/AlertWindow";
 
 const Account = () => {
   return (

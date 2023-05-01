@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import Card from './Card';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import Card from "./Card";
+import axios from "axios";
 
 const TourOverviewPage = () => {
   const [tours, setTours] = useState(
-    JSON.parse(localStorage.getItem('toursData')) || []
+    JSON.parse(localStorage.getItem("toursData")) || []
   );
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/v1/tours?limit=10').then((res) => {
-      localStorage.setItem('toursData', JSON.stringify(res.data.data.data));
+    axios.get("http://localhost:8000/api/v1/tours?limit=10").then((res) => {
+      localStorage.setItem("toursData", JSON.stringify(res.data.data.data));
       setTours(res.data.data.data);
     });
     //   .then((res) => console.log(res.data.data.data));
@@ -24,9 +24,9 @@ const TourOverviewPage = () => {
       difficulty={tour.difficulty}
       duration={tour.duration}
       summary={tour.summary}
-      startDate={new Date(tour.startDates[0]).toLocaleString('en-IN', {
-        month: 'long',
-        year: 'numeric',
+      startDate={new Date(tour.startDates[0]).toLocaleString("en-IN", {
+        month: "long",
+        year: "numeric",
       })}
       tourLocationLegth={tour.locations.length}
       maxGroupSize={tour.maxGroupSize}

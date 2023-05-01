@@ -1,7 +1,7 @@
-import React from 'react';
-import { useAuth } from '../contexts/userAuth';
+import React from "react";
+import { useAuth } from "../../contexts/userAuth";
 
-import AccNavItem from './AccNavItem';
+import AccNavItem from "./AccNavItem";
 
 const AccSidebar = () => {
   const { user } = useAuth();
@@ -15,7 +15,7 @@ const AccSidebar = () => {
           <AccNavItem link="#" text="My reviews" icon="star" />
           <AccNavItem link="#" text="Billing" icon="credit-card" />
         </ul>
-        {user.role === 'admin' && (
+        {user.role === "admin" && (
           <div className="admin-nav">
             <h5 className="admin-nav__heading">Admin</h5>
             <ul className="side-nav">

@@ -1,5 +1,5 @@
 // import { createPortal } from 'react-dom';
-import { useErr } from '../contexts/ErrContext';
+import { useErr } from "../../contexts/ErrContext";
 
 const ErrorPage = () => {
   const { error } = useErr();
