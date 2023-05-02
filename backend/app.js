@@ -38,8 +38,8 @@ app.use(express.json()); //middleware (to get req body object)
 // app.use(cors({ origin: '*' })); //allow to all
 app.use(
   cors({
-    origin: ['http://localhost:5173', 'https://natourme.netlify.app/'],
-    methods: ['PUT', 'GET', 'POST', 'DELETE', 'PATCH'],
+    origin: ['http://localhost:5173', 'https://natourme.netlify.app'],
+    methods: ['GET', 'POST', 'DELETE', 'PATCH'],
     credentials: true,
   })
 );
