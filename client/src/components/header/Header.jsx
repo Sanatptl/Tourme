@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useCookies } from "react-cookie";
 import { useAuth } from "../../contexts/userAuth";
 import KebabMenu from "./KebabMenu";
+import { BASE_URL } from "../../utils";
 
 const Header = () => {
   // const openLoginModal = toggleLoginHandler(showLogin, setShowLogin, toggle);
@@ -74,7 +75,7 @@ const Header = () => {
 
 function logout(setIsLoggedIn, navigate, setCookie) {
   return () => {
-    axios.get("http://127.0.0.1:8000/api/v1/users/logout").then((res) => {
+    axios.get(`${BASE_URL}/api/v1/users/logout`).then((res) => {
       if (res.status === 200) toast.success("You're Logged out!");
       setCookie("jwt", "logout", {
         path: "/",

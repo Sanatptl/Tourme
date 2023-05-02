@@ -53,6 +53,9 @@ export default App;
 
 //
 
+// base_url = https://tourme.onrender.com
+//
+
 //
 
 //

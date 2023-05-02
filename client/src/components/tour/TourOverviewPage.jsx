@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Card from "./Card";
 import axios from "axios";
+import { BASE_URL } from "../../utils";
 
 const TourOverviewPage = () => {
   const [tours, setTours] = useState(
@@ -8,7 +9,7 @@ const TourOverviewPage = () => {
   );
 
   useEffect(() => {
-    axios.get("http://localhost:8000/api/v1/tours?limit=10").then((res) => {
+    axios.get(`${BASE_URL}/api/v1/tours?limit=10`).then((res) => {
       localStorage.setItem("toursData", JSON.stringify(res.data.data.data));
       setTours(res.data.data.data);
     });

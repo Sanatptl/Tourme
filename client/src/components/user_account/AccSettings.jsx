@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../../contexts/userAuth";
 import axios from "axios";
 import AlertWindow from "../alert_error/AlertWindow";
+import { BASE_URL } from "../../utils";
 
 const AccSettings = () => {
   const { user } = useAuth();
@@ -20,7 +21,7 @@ const AccSettings = () => {
     data.append("email", email);
     data.append("photo", file);
 
-    fetch("http://127.0.0.1:8000/api/v1/users/updateMe", {
+    fetch(`${BASE_URL}/api/v1/users/updateMe"`, {
       method: "PATCH",
       body: data,
       credentials: "include",

@@ -5,6 +5,7 @@ import AlertWindow from "../alert_error/AlertWindow";
 import { useCookies } from "react-cookie";
 import { useAuth } from "../../contexts/userAuth";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../utils";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -33,7 +34,7 @@ const Signup = () => {
       const result = await axios({
         method: "POST",
         withCredentials: true,
-        url: "http://127.0.0.1:8000/api/v1/users/signup",
+        url: `${BASE_URL}/api/v1/users/signup`,
         data,
       });
       setCookie("jwt", result.data.token, { path: "/" });

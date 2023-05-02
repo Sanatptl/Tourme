@@ -6,6 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "../../contexts/userAuth";
 import FormInput from "./FormInputs";
+import { BASE_URL } from "../../utils";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -20,23 +21,10 @@ const Login = () => {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-      // const config = {
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   withCredentials: true,
-      // };
-      // const result = await axios.post(
-      //   'http://127.0.0.1:8000/api/v1/users/login',
-      //   {
-      //     email,
-      //     password,
-      //   },
-      //   config
-      // );
+
       const result = await axios({
         method: "post",
-        url: "http://127.0.0.1:8000/api/v1/users/login",
+        url: `${BASE_URL}/api/v1/users/login`,
         data: {
           email,
           password,

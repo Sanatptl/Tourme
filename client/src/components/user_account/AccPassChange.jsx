@@ -5,6 +5,7 @@ import { useErr } from "../../contexts/ErrContext";
 import { useNavigate } from "react-router-dom";
 import ErrorPage from "../alert_error/ErrorPage";
 import AlertWindow from "../alert_error/AlertWindow";
+import { BASE_URL } from "../../utils";
 
 const AccPassChange = () => {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -26,7 +27,7 @@ const AccPassChange = () => {
 
       const result = await axios({
         method: "PATCH",
-        url: "http://127.0.0.1:8000/api/v1/users/updatePassword",
+        url: `${BASE_URL}/api/v1/users/updatePassword`,
         data: { currentPassword, newPassword, confirmPassword },
         withCredentials: true,
         // headers: {
