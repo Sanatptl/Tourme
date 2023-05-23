@@ -2,24 +2,28 @@ import Header from "./header/Header";
 import Footer from "./footer/Footer";
 import OverviewPage from "./tour/Overview";
 import Card from "./tour/Card";
-import Login from "./user_account/Login";
+import LoginPage from "../pages/login_page/LoginPage";
 import Tour from "./tour/Tour";
 import TourOverviewPage from "./tour/TourOverviewPage";
 import Home from "./overview/Home";
 import Account from "./user_account/Account";
 import ErrorPage from "./alert_error/ErrorPage";
-import Signup from "./user_account/Signup";
+import SignupPage from "../pages/SignupPage/SignupPage";
+import Hamburger from "./header/Hamburger";
+import TourCards from "./overview/TourCards";
 
 export {
   Header,
   Footer,
   OverviewPage,
   Card,
-  Login,
+  LoginPage,
   Tour,
   TourOverviewPage,
   Home,
   Account,
   ErrorPage,
-  Signup,
+  SignupPage,
+  Hamburger,
+  TourCards,
 };

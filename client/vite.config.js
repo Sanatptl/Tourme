@@ -5,7 +5,8 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   server: {
     proxy: {
-      "/img": "https://tourme.onrender.com",
+      // "/img": "https://tourme.onrender.com",
+      "/img": "http://127.0.0.1:8000",
     },
   },
   plugins: [react()],

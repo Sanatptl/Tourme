@@ -1,109 +1,101 @@
 import { useState } from "react";
 import axios from "axios";
-import { useCookies } from "react-cookie";
-import { useErr } from "../../contexts/ErrContext";
-import { useNavigate } from "react-router-dom";
-import ErrorPage from "../alert_error/ErrorPage";
 import AlertWindow from "../alert_error/AlertWindow";
 import { BASE_URL } from "../../utils";
+import useForm from "../../hooks/useForm";
+import FormInput from "./FormInputs";
 
 const AccPassChange = () => {
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const initialValue = {
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  };
+
+  const [values, handleChange, resetForm] = useForm(initialValue);
   const [show, setShow] = useState(false);
   const [msg, setMsg] = useState("");
-  const [, setCookie] = useCookies(["jwt"]);
   const [type, setType] = useState("");
-  // const { setError, error } = useErr();
-  // const navigate = useNavigate();
-  // console.log(newPassword);
+
   const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      e.preventDefault();
-      if (!currentPassword || !newPassword || !confirmPassword) {
+      if (
+        !values.currentPassword ||
+        !values.newPassword ||
+        !values.confirmPassword
+      ) {
         throw new Error("Please fill up required fields");
       }
 
       const result = await axios({
         method: "PATCH",
         url: `${BASE_URL}/api/v1/users/updatePassword`,
-        data: { currentPassword, newPassword, confirmPassword },
+        data: {
+          currentPassword: values.currentPassword,
+          newPassword: values.newPassword,
+          confirmPassword: values.confirmPassword,
+        },
         withCredentials: true,
-        // headers: {
-        //   'Content-Type': 'application/json', // Set Content-Type header
-        // },
       });
-      setCookie("jwt", result.data.token, { path: "/" });
       if (result.data.status === "success") {
         setMsg("Data updated successfully!");
         setType("success");
+        resetForm();
       }
     } catch (err) {
-      console.log(err);
       if (err.response) {
         setMsg(err.response.data.message);
       } else {
         setMsg(err.message);
       }
       setType("error");
-      // navigate('/error');
     } finally {
       setShow(true);
     }
   };
+
   let content = (
     <div className="user-view__form-container">
       <h2 className="heading-secondary ma-bt-md">Password change</h2>
 
       <form className="form form-user-password">
-        <div className="form__group">
-          <label className="form__label" htmlFor="password-current">
-            Current password
-          </label>
-          <input
-            id="password-current"
-            className="form__input"
-            type="password"
-            placeholder="••••••••"
-            required
-            minLength="8"
-            value={currentPassword}
-            onChange={(e) => setCurrentPassword(e.target.value)}
-          />
-        </div>
+        <FormInput
+          label="Current password"
+          id="password-current"
+          type="password"
+          name="currentPassword"
+          placeholder="••••••••"
+          required={true}
+          minLength="8"
+          value={values.currentPassword}
+          onChange={handleChange}
+        />
 
-        <div className="form__group">
-          <label className="form__label" htmlFor="password">
-            New password
-          </label>
-          <input
-            id="password"
-            className="form__input"
-            type="password"
-            placeholder="••••••••"
-            required
-            minLength="8"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-          />
-        </div>
+        <FormInput
+          label="New password"
+          id="password"
+          type="password"
+          name="newPassword"
+          placeholder="••••••••"
+          required={true}
+          minLength="8"
+          value={values.newPassword}
+          onChange={handleChange}
+        />
 
-        <div className="form__group ma-bt-lg">
-          <label htmlFor="password-confirm" className="form__label">
-            Confirm password
-          </label>
-          <input
-            id="password-confirm"
-            className="form__input"
-            type="password"
-            placeholder="••••••••"
-            required
-            minLength="8"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-        </div>
+        <FormInput
+          classDiv="ma-bt-lg"
+          label="Confirm password"
+          id="password-confirm"
+          type="password"
+          name="confirmPassword"
+          placeholder="••••••••"
+          required={true}
+          minLength="8"
+          value={values.confirmPassword}
+          onChange={handleChange}
+        />
 
         <div className="form__group right">
           <button

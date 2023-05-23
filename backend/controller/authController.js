@@ -6,35 +6,27 @@ const AppError = require('./../utils/appError');
 const sendEmail = require('./../utils/email');
 const jwt = require('jsonwebtoken');
 
-// const generateToken = (id) => {
-//   return jwt.sign({ id }, process.env.JWT_SECRET, {
-//     expiresIn: process.env.JWT_EXPIRES_IN,
-//   });
-// };
-
 const sendToken = (user, statusCode, res) => {
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
+
   // send cookie also
   const cookieOption = {
-    expires: new Date(
-      Date.now() + process.env.COOKIES_EXPIRES_IN * 24 * 60 * 60 * 1000
-    ),
     httpOnly: true,
-    sameSite: true,
-    domain: '127.0.0.1',
-    path: '/',
+    sameSite: 'strict',
+    maxAge: 90 * 24 * 60 * 60 * 1000,
+    secure: process.env.NODE_ENV === 'production',
   };
 
-  if (process.env.NODE_ENV === 'production') cookieOption.secure = true;
+  // if (process.env.NODE_ENV === 'production') cookieOption.secure = true;
 
-  res.cookie('jwt', token, cookieOption);
+  res.cookie('jwToken', token, cookieOption);
+
   //remove the "password" from the outputs
   user.password = undefined;
   res.status(statusCode).json({
     status: 'success',
-    token,
     data: {
       user,
     },
@@ -96,8 +88,8 @@ exports.protect = catchAsyncFn(async (req, res, next) => {
     req.headers.authorization.startsWith('Bearer')
   ) {
     token = req.headers.authorization.split(' ')[1];
-  } else if (req.cookies.jwt) {
-    token = req.cookies.jwt;
+  } else if (req.cookies.jwToken) {
+    token = req.cookies.jwToken;
   }
   if (!token)
     return next(
@@ -247,14 +239,14 @@ exports.updatePassword = async (req, res, next) => {
 exports.isLoggedIn = catchAsyncFn(async (req, res, next) => {
   // 1) getting token and check if it's exist
 
-  if (!req.cookies.jwt)
+  if (!req.cookies.jwToken)
     return next(
       new AppError("you're not logged in! please log in to get access.", 401)
     );
 
   // 2) validate token(varification) : to verify if someone has manipulate the payload or token has expired or not
   const decoded = await promisify(jwt.verify)(
-    req.cookies.jwt,
+    req.cookies.jwToken,
     process.env.JWT_SECRET
   );
   // console.log(decoded); //payload object
@@ -280,10 +272,12 @@ exports.isLoggedIn = catchAsyncFn(async (req, res, next) => {
 
 exports.logOut = (req, res, next) => {
   //here we basicly override the jwt token
-  res.cookie('jwt', 'logout', {
-    expires: new Date(Date.now() + 10 * 1000),
+  res.cookie('jwToken', 'logout', {
     httpOnly: true,
+    maxAge: 60 * 1000,
   });
+
+  // res.clearCookie('jwToken');
   res.status(200).json({
     status: 'success',
   });

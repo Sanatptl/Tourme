@@ -1,7 +1,7 @@
 import axios from "axios";
-import useBodyScrollLock from "./hooks";
 
-export const BASE_URL = "https://tourme.onrender.com";
+// export const BASE_URL = "https://tourme.onrender.com";
+export const BASE_URL = "http://localhost:8000";
 
 export const getTourDetail = (id, setTourDetails, setShowTour) => {
   axios.get(`${BASE_URL}/api/v1/tours/${id}`).then((res) => {
@@ -11,11 +11,4 @@ export const getTourDetail = (id, setTourDetails, setShowTour) => {
   setShowTour(true);
 };
 
-export const toggleLoginHandler = (showLogin, setShowLogin, toggle) => () => {
-  setShowLogin(!showLogin);
-  toggle();
-};
-
 //
-
-// export const BASE_URL = "http://localhost:8000";

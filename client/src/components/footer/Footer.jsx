@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 
 const Footer = () => {
   return (
-    <div className="footer">
+    <section className="footer" id="footer">
       <div className="footer__logo">
         <img src="/img/logo-green.png" alt="Natours logo" />
       </div>
@@ -24,7 +24,7 @@ const Footer = () => {
         </li>
       </ul>
       <p className="footer__copyright">&copy; by Sanat. All rights reserved.</p>
-    </div>
+    </section>
   );
 };
 

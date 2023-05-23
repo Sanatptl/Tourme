@@ -3,65 +3,47 @@ import { useAuth } from "../../contexts/userAuth";
 import axios from "axios";
 import AlertWindow from "../alert_error/AlertWindow";
 import { BASE_URL } from "../../utils";
+import FormInput from "./FormInputs";
+import useForm from "./../../hooks/useForm";
 
 const AccSettings = () => {
   const { user } = useAuth();
-  const [name, setName] = useState(user.name);
-  const [email, setEmail] = useState(user.email);
+  const initialValue = { name: user.name, email: user.email };
+  const [values, handleChange, resetForm] = useForm(initialValue);
   const [file, setFile] = useState(null);
   const [type, setType] = useState("");
   const [msg, setMsg] = useState("");
   const [show, setShow] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const data = new FormData();
-    data.append("name", name);
-    data.append("email", email);
+    data.append("name", values.name);
+    data.append("email", values.email);
     data.append("photo", file);
 
-    fetch(`${BASE_URL}/api/v1/users/updateMe"`, {
-      method: "PATCH",
-      body: data,
-      credentials: "include",
-      mode: "cors",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status === "success") {
-          setMsg("Profile updated successfully!");
-          setType("success");
-        }
-        if (data.status === "fail") {
-          setMsg(data.message);
-          setType("error");
-        }
-        setTimeout(() => {
-          window.location.reload();
-        }, 1500);
-      })
-      .catch((err) => {
-        setMsg(err.message);
-        setType("error");
-        console.log(err);
-      })
-      .finally(() => {
-        setShow(true);
+    try {
+      const result = await axios({
+        method: "PATCH",
+        url: `${BASE_URL}/api/v1/users/updateMe`,
+        data,
+        withCredentials: true,
       });
-
-    // try {
-    //   const result = await axios({
-    //     method: 'PATCH',
-    //     url: 'http://127.0.0.1:8000/api/v1/users/updateMe',
-    //     data: { name, email },
-    //     withCredentials: true,
-    //   });
-
-    //   console.log(result);
-    // } catch (err) {
-    //   console.log(err);
-    // }
+      if (result.data.status === "success") {
+        setMsg("Profile updated successfully!");
+        setType("success");
+      } else if (result.data.status === "fail") {
+        setMsg(result.data.message);
+        setType("error");
+      }
+    } catch (err) {
+      setMsg(err.message);
+      setType("error");
+    } finally {
+      setShow(true);
+      resetForm();
+    }
   };
 
   return (
@@ -72,34 +54,26 @@ const AccSettings = () => {
         <h2 className="heading-secondary ma-bt-md">Your account settings</h2>
 
         <form className="form form-user-data">
-          <div className="form__group">
-            <label className="form__label" htmlFor="name">
-              Name
-            </label>
-            <input
-              id="name"
-              className="form__input"
-              type="text"
-              value={name}
-              required
-              name="name"
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
-          <div className="form__group ma-bt-md">
-            <label className="form__label" htmlFor="email">
-              Email address
-            </label>
-            <input
-              id="email"
-              className="form__input"
-              type="email"
-              value={email}
-              required
-              name="email"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
+          <FormInput
+            label="Name"
+            id="name"
+            name="name"
+            type="text"
+            value={values.name}
+            placeholder="Enter your name"
+            onChange={handleChange}
+          />
+
+          <FormInput
+            label="Email address"
+            id="email"
+            name="email"
+            type="email"
+            placeholder="you@example.com"
+            value={values.email}
+            onChange={handleChange}
+            classDiv={"ma-bt-md"}
+          />
           <div className="form__group form__photo-upload">
             <img
               className="form__user-photo"

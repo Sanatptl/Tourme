@@ -2,17 +2,17 @@ import {
   Header,
   Footer,
   Tour,
-  Login,
   Home,
   Account,
   ErrorPage,
-  Signup,
+  LoginPage,
+  SignupPage,
+  TourCards,
 } from "./";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-// import axios from 'axios';
 import AuthProvider from "../contexts/userAuth";
 import TourProvider from "../contexts/TourContext";
-import ErrProvider, { useErr } from "../contexts/ErrContext";
+import ErrProvider from "../contexts/ErrContext";
 
 const App = () => {
   return (
@@ -29,8 +29,16 @@ const App = () => {
                 </TourProvider>
               }
             ></Route>
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/login" element={<Login />}></Route>
+            <Route
+              path="/alltours"
+              element={
+                <TourProvider>
+                  <TourCards />
+                </TourProvider>
+              }
+            />
+            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/login" element={<LoginPage />}></Route>
             <Route path="/me" element={<Account />} />
             <Route
               path="/tour"

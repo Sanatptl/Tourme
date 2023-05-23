@@ -34,7 +34,7 @@ html {
 body {
   line-height: 1.6;
   font-weight: 300;
-  font-family: 'Lato', sans-serif;
+  font-family: "Lato", sans-serif;
   color: #777;
   padding: 3rem;
   min-height: 100vh;
@@ -689,7 +689,7 @@ body {
 }
 
 .hamburger {
-  display: none;
+  /* display: none; */
 }
 
 .fa_arrow,
@@ -790,6 +790,7 @@ body {
 
 .header__hero {
   height: 100%;
+  width: 100%;
 }
 
 .header__hero-img {
@@ -905,7 +906,7 @@ body {
 }
 
 .marker {
-  background-image: url('../img/pin.png');
+  background-image: url("../img/pin.png");
   background-size: cover;
   width: 32px;
   height: 40px;
@@ -918,7 +919,7 @@ body {
 
 .mapboxgl-popup-content {
   text-align: center;
-  font-family: 'Lato', sans-serif;
+  font-family: "Lato", sans-serif;
   padding: 1.5rem !important;
   font-size: 1.4rem;
   -webkit-box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.15) !important;
@@ -1221,7 +1222,7 @@ body {
 }
 .reviews:before,
 .reviews:after {
-  content: '';
+  content: "";
   width: 2rem;
 }
 .reviews__avatar {
@@ -1298,7 +1299,7 @@ body {
 
 .section-header {
   position: relative;
-  height: 38vw;
+  height: 95vh;
   clip-path: polygon(
     0 0,
     100% 0,
@@ -1451,4 +1452,18 @@ body {
   max-width: 68rem;
   margin: 0 auto;
   padding: 0 8rem;
+}
+
+@media screen and (max-width: 664px) {
+  html {
+    font-size: 50%;
+  }
+
+  body {
+    padding: 0;
+  }
+
+  .section-header {
+    height: 45vh;
+  }
 }

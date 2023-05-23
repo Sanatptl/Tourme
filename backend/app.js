@@ -1,7 +1,5 @@
 'use strict';
 
-// const fs = require('fs');
-const bodyParser = require('body-parser');
 const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
@@ -91,7 +89,7 @@ app.use(express.static(`${__dirname}/public`)); //provide a way to load static f
 
 // for testing purpose middleware
 app.use((req, res, next) => {
-  // console.log(req.cookies);
+  console.log(req.cookies);
   next();
 });
 

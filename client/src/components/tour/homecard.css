@@ -1,0 +1,194 @@
+.container_home_card {
+  display: flex;
+  width: 100%;
+}
+
+.home_card {
+  perspective: 240rem;
+  -moz-perspective: 240rem;
+  position: relative;
+  width: 32rem;
+  height: 44.8rem;
+  margin: 0 auto;
+}
+
+.card_side {
+  height: 44.8rem;
+  transition: all 0.8s;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  backface-visibility: hidden;
+  border-radius: 3px;
+  overflow: hidden;
+  box-shadow: 0 2.4rem 6.4rem rgba(#000, 0.15);
+}
+
+.card_side-front {
+  background-color: #fff;
+}
+
+.home_card:hover .card_side-front {
+  transform: rotateY(-180deg);
+}
+.card_front-picture {
+  background-size: cover;
+  height: 20.8rem;
+  background-blend-mode: screen;
+  -webkit-clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+  clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+
+.card_front-picture-1 {
+  background-image: linear-gradient(to right bottom, #ffb900, #ff7730),
+    url("https://images.unsplash.com/photo-1681829495534-f118398aca40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80");
+}
+.card_front-picture-3 {
+  background-image: linear-gradient(to right bottom, #2998ff, #5643fa),
+    url("https://images.unsplash.com/photo-1585767928941-f71ce7702b89?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1172&q=80");
+}
+.card_front-picture-2 {
+  background-image: linear-gradient(to right bottom, #7ed56f, #28b485),
+    url("https://images.unsplash.com/photo-1682404816927-b177967cc2e3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80");
+}
+
+.card_heading {
+  font-size: 3.8rem;
+  font-weight: 300;
+  text-transform: uppercase;
+  text-align: right;
+  color: #fff;
+  position: absolute;
+  top: 9.6rem;
+  right: 1.6rem;
+  width: 55%;
+}
+.card_heading-span {
+  padding: 0.64rem 2.4rem;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.card_heading-span-1,
+.card_side-back-1 {
+  background-image: linear-gradient(to right bottom, #ffb900, #ff7730);
+}
+.card_heading-span-2,
+.card_side-back-2 {
+  background-image: linear-gradient(to right bottom, #7ed56f, #28b485);
+}
+.card_heading-span-3,
+.card_side-back-3 {
+  background-image: linear-gradient(to right bottom, #2998ff, #5643fa);
+}
+
+.home_card_details {
+  padding: 3.2rem;
+}
+.home_card_details ul {
+  list-style: none;
+  width: 80%;
+  padding-left: 4rem;
+}
+
+.home_card_details ul li {
+  text-align: center;
+  font-size: 1.2rem;
+  padding: 1.6rem;
+}
+.home_card_details ul li:not(:last-child) {
+  border-bottom: 1px solid #eaeaea;
+}
+
+.card_side-back {
+  transform: rotateY(180deg);
+}
+
+.home_card:hover .card_side-back {
+  transform: rotateY(0);
+}
+
+/* .card_side-back-1 {
+  background-image: linear-gradient(to right bottom, #0db4b9, #0a9094);
+}
+.card_side-back-2 {
+  background-image: linear-gradient(to right bottom, #0db4b9, #0a9094);
+}
+.card_side-back-3 {
+  background-image: linear-gradient(to right bottom, #0db4b9, #0a9094);
+} */
+
+.card_flip {
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+}
+
+.card_back-box {
+  text-align: center;
+  color: #fff;
+  margin-bottom: 9.6rem;
+}
+
+.card_back-title {
+  font-size: 4.3rem;
+  font-weight: 100;
+}
+
+.card_btn:link,
+.card_btn:visited {
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 1rem 2rem;
+  display: inline-block;
+  border-radius: 100px;
+  transition: all 0.2s;
+  position: relative;
+  font-size: 1.5rem;
+}
+
+.card_btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 1rem 2rem rgba(#000, 0.2);
+}
+
+.card_btn:active {
+  transform: translateY(-1px);
+  box-shadow: 0 0.5rem 1rem rgba(#000, 0.2);
+}
+
+.card_btn:hover::after {
+  transform: scaleX(1.4) scaleY(1.6);
+  opacity: 0;
+}
+
+.card_btn-white {
+  background-color: #fff;
+  color: #777;
+}
+.card_btn-white::after {
+  background-color: #fff;
+}
+
+.card_btn::after {
+  content: "";
+  display: inline-block;
+  height: 100%;
+  width: 100%;
+  border-radius: 16rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  transition: all 0.4s;
+}
+
+.card_btn-animated {
+  animation: moveInBottom 0.5s ease-out 0.75s;
+  animation-fill-mode: backwards;
+}
