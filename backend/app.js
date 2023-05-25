@@ -1,13 +1,13 @@
 'use strict';
 
 const express = require('express');
+const cors = require('cors');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
-const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
 
@@ -29,10 +29,9 @@ const reviewRouter = require('./routes/reviewRoute');
 const app = express();
 
 ///////////////Middleware/////////////////
-app.use(express.json()); //middleware (to get req body object)
 
 //allow access to cors
-// Make sure you have added the cors middleware to your Express app before any other middleware that might send responses (such as body parsers or error handlers). This is important because the cors middleware needs to set the appropriate headers on the response before it is sent to the client.
+// Make sure you have added the cors middleware to your Express app before any other middleware that might send responses (such as body parsers or error handlers) and before other middleware that may handle the request, (e.g. including the express.json() middleware). This is important because the cors middleware needs to set the appropriate headers on the response before it is sent to the client.
 // app.use(cors({ origin: '*' })); //allow to all
 app.use(
   cors({
@@ -41,6 +40,9 @@ app.use(
     credentials: true,
   })
 );
+
+//middleware (to get req body object)
+app.use(express.json());
 
 // security http headers
 app.use(helmet());
@@ -89,7 +91,7 @@ app.use(express.static(`${__dirname}/public`)); //provide a way to load static f
 
 // for testing purpose middleware
 app.use((req, res, next) => {
-  console.log(req.cookies);
+  // console.log(req.cookies);
   next();
 });
 
