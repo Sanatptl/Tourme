@@ -35,8 +35,7 @@ const app = express();
 // app.use(cors({ origin: '*' })); //allow to all
 app.use(
   cors({
-    origin: '*',
-    // origin: ['http://localhost:5173', 'https://natourme.netlify.app'],
+    origin: ['http://localhost:5173', 'https://tourmee.netlify.app'],
     methods: ['GET', 'POST', 'DELETE', 'PATCH'],
     credentials: true,
   })
