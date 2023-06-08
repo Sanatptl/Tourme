@@ -1,6 +1,7 @@
 import axios from "axios";
 
-export const BASE_URL = "https://tourme.onrender.com";
+export const BASE_URL = "https://apricot-antelope-ring.cyclic.app";
+// export const BASE_URL = "https://tourme.onrender.com";
 // export const BASE_URL = "http://localhost:8000";
 
 export const getTourDetail = (id, setTourDetails, setShowTour) => {

@@ -17,7 +17,7 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       const result = await axios({
-        method: "post",
+        method: "POST",
         url: `${BASE_URL}/api/v1/users/login`,
         data: {
           email: values.email,
@@ -25,6 +25,7 @@ const LoginPage = () => {
         },
         withCredentials: true,
       });
+      console.log(result);
       setUser(result.data.data.user);
       setIsLoggedIn(true);
       toast.success("Login successfully!");
@@ -32,6 +33,7 @@ const LoginPage = () => {
         navigate(-1);
       }, 3000);
     } catch (err) {
+      // console.log(err);
       toast.error(err.response.data.message);
     }
   };
