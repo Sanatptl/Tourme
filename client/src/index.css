@@ -1467,3 +1467,9 @@ body {
     height: 45vh;
   }
 }
+
+@layer utilities {
+  .my-input {
+    @apply h-20 placeholder:text-2xl bg-[#f2f2f2] border-solid border-b-[3px] border-b-transparent focus:outline-0 focus:border-b-[#55c57a] invalid:focus:border-b-[#ff7730];
+  }
+}

@@ -8,6 +8,7 @@ import {
   LoginPage,
   SignupPage,
   TourCards,
+  CreateTourPage,
 } from "./";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AuthProvider from "../contexts/userAuth";
@@ -48,6 +49,7 @@ const App = () => {
                 </TourProvider>
               }
             />
+            <Route path="/createtour" element={<CreateTourPage />} />
             <Route path="/error" element={<ErrorPage />} />
           </Routes>
           <Footer />

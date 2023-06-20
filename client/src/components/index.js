@@ -4,13 +4,14 @@ import OverviewPage from "./tour/Overview";
 import Card from "./tour/Card";
 import LoginPage from "../pages/login_page/LoginPage";
 import Tour from "./tour/Tour";
-import TourOverviewPage from "./tour/TourOverviewPage";
+import TourOverviewPage from "../pages/create_tour/TourOverviewPage";
 import Home from "./overview/Home";
 import Account from "./user_account/Account";
 import ErrorPage from "./alert_error/ErrorPage";
 import SignupPage from "../pages/SignupPage/SignupPage";
 import Hamburger from "./header/Hamburger";
 import TourCards from "./overview/TourCards";
+import CreateTourPage from "./tour/CreateTourPage";
 
 export {
   Header,
@@ -26,4 +27,5 @@ export {
   SignupPage,
   Hamburger,
   TourCards,
+  CreateTourPage,
 };
