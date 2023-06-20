@@ -1,5 +1,6 @@
 import useScrollPosition from "../../hooks/useScrollPosition";
 import "./hamburger.css";
+import { Link } from "react-router-dom";
 
 const Hamburger = ({ onClick, isActive }) => {
   const show = useScrollPosition(90);
@@ -9,13 +10,19 @@ const Hamburger = ({ onClick, isActive }) => {
       <div className={`ham_menu ${isActive ? "block" : "hidden"}`}>
         <ul className="ham_menu_items">
           <li>
-            <a href="#">about</a>
+            <Link to="/login" onClick={onClick}>
+              Login
+            </Link>
           </li>
           <li>
-            <a href="#footer">content</a>
+            <Link to="/createtour" onClick={onClick}>
+              Create Tour
+            </Link>
           </li>
           <li>
-            <a href="#">popular tours</a>
+            <Link to="/signup" onClick={onClick}>
+              Sign Up
+            </Link>
           </li>
         </ul>
       </div>

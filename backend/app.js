@@ -37,8 +37,16 @@ const app = express();
 //middleware (to get req body object)
 app.use(express.json());
 
+app.use(
+  cors({
+    origin: 'https://tourmee.netlify.app',
+    methods: ['GET', 'POST', 'DELETE', 'PATCH'],
+    credentials: true,
+  })
+);
+
 // security http headers
-app.use(helmet());
+// app.use(helmet());
 
 // Developmeant logging
 if (process.env.NODE_ENV === 'development') {
@@ -74,20 +82,13 @@ app.use(
 );
 
 //compress response text/data
-app.use(compression());
+// app.use(compression());
 
 // Body parser, reading data from body into req.body
 // app.use(bodyParser.json({ strict: true, limit: '10kb' })); //middleware
 // app.use(express.urlencoded({ extended: true, limit: '10kb' }));
-app.use(express.static(`${__dirname}/public`)); //provide a way to load static file (e.g. html,img etc)
+app.use(express.static(`public`)); //provide a way to load static file (e.g. html,img etc)
 
-app.use(
-  cors({
-    origin: 'https://tourmee.netlify.app',
-    methods: ['GET', 'POST', 'DELETE', 'PATCH'],
-    credentials: true,
-  })
-);
 app.use(cookieParser());
 // for testing purpose middleware
 app.use((req, res, next) => {

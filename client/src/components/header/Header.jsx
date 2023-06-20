@@ -21,7 +21,7 @@ const Header = () => {
     <div>
       <header className="header">
         <nav className="nav nav--tours">
-          <Link to="/" className="nav__el">
+          <Link to="/alltours" className="nav__el">
             All tours
           </Link>
           {/* <form className="nav__search">
@@ -42,6 +42,9 @@ const Header = () => {
         </div>
         <KebabMenu onClick={handleClick} isActive={isActive} />
         <nav className={`nav nav--user ${isActive && "open"}`}>
+          <Link to="/createtour" className="nav__el">
+            Create Tour
+          </Link>
           {isLoggedIn ? (
             <LoggedIn user={user} setIsLoggedIn={setIsLoggedIn} />
           ) : (
